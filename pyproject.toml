@@ -1,11 +1,11 @@
 [project]
-name = "mcp-server-fider"
-version = "0.1.0"
+name = "mcp-fider"
+version = "2025.06.27.160000"
 description = "MCP (Model Context Protocol) server for Fider API integration"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Your Name", email = "your.email@example.com" }
+    { name = "Ringostat", email = "info@ringostat.com" }
 ]
 requires-python = ">=3.8"
 dependencies = [
@@ -17,7 +17,7 @@ Homepage = "https://github.com/ringostat/fider-mcp"
 Issues = "https://github.com/ringostat/fider-mcp/issues"
 
 [project.scripts]
-mcp-server-fider = "mcp_server_fider:main"
+mcp-fider = "mcp_server_fider:main"
 
 [tool.uv.sources]
 

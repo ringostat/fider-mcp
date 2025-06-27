@@ -450,18 +450,20 @@ class FiderMCPServer:
         }
 
 
-async def main():
-    """Main entry point."""
-    server = FiderMCPServer()
+def main():
+    """Main entry point for script execution."""
+    async def run_server():
+        server = FiderMCPServer()
+        try:
+            await server.start()
+        except KeyboardInterrupt:
+            logger.info("Server shutting down...")
+        except Exception as e:
+            logger.error(f"Server error: {e}")
+            sys.exit(1)
     
-    try:
-        await server.start()
-    except KeyboardInterrupt:
-        logger.info("Server shutting down...")
-    except Exception as e:
-        logger.error(f"Server error: {e}")
-        sys.exit(1)
+    asyncio.run(run_server())
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

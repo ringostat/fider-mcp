@@ -15,21 +15,17 @@ This MCP server provides the following tools:
 
 ## Installation
 
-### Using uv (recommended - no cloning needed!)
+### Using uvx (recommended - no installation needed!)
 
 ```bash
 # Install uv if you haven't already
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Run directly from GitHub without cloning!
-uvx --from git+https://github.com/ringostat/fider-mcp.git mcp-server-fider
-```
+# Run directly from PyPI (once published)
+uvx --from mcp-fider==2025.06.27.160000 --refresh-package mcp-fider mcp-fider
 
-### Using uv run (alternative)
-
-```bash
-# Run script directly from GitHub
-uv run --from git+https://github.com/ringostat/fider-mcp.git python mcp_server_fider.py
+# Or run from GitHub directly
+uvx --from git+https://github.com/ringostat/fider-mcp.git mcp-fider
 ```
 
 ### Using pip (if you prefer traditional method)
@@ -78,7 +74,8 @@ The server requires the following environment variables:
   "mcpServers": {
     "fider": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/ringostat/fider-mcp.git", "mcp-server-fider"],
+      "args": ["--from", "mcp-fider==2025.06.27.160000", 
+               "--refresh-package", "mcp-fider", "mcp-fider"],
       "env": {
         "FIDER_BASE_URL": "https://your-fider-instance.com",
         "FIDER_API_KEY": "your-api-key-here"
@@ -99,11 +96,11 @@ You can also run the server directly for testing:
 export FIDER_BASE_URL="https://your-fider-instance.com"
 export FIDER_API_KEY="your-api-key-here"
 
-# Run directly from GitHub (no cloning needed!)
-uvx --from git+https://github.com/ringostat/fider-mcp.git mcp-server-fider
+# Run from PyPI (once published)
+uvx --from mcp-fider==2025.06.27.160000 --refresh-package mcp-fider mcp-fider
 
-# Or use uv run
-uv run --from git+https://github.com/ringostat/fider-mcp.git python mcp_server_fider.py
+# Or run from GitHub directly
+uvx --from git+https://github.com/ringostat/fider-mcp.git mcp-fider
 ```
 
 ## Development
@@ -119,6 +116,16 @@ uv run pytest
 ```bash
 uv run black .
 uv run ruff check .
+```
+
+### Publishing to PyPI
+
+```bash
+# Build the package
+uv build
+
+# Publish to PyPI
+uv publish
 ```
 
 ## Tool Descriptions
