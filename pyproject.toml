@@ -1,6 +1,6 @@
 [project]
 name = "mcp-fider"
-version = "2025.06.27.160000"
+version = "2025.06.27.170000"
 description = "MCP (Model Context Protocol) server for Fider API integration"
 readme = "README.md"
 license = { text = "MIT" }

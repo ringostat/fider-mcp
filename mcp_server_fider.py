@@ -266,6 +266,184 @@ class FiderMCPServer:
                     },
                     'required': ['number', 'status']
                 }
+            },
+            {
+                'name': 'list_comments',
+                'description': 'List comments for a specific post',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'number': {
+                            'type': 'integer',
+                            'description': 'The post number to get comments for'
+                        }
+                    },
+                    'required': ['number']
+                }
+            },
+            {
+                'name': 'add_comment',
+                'description': 'Add a comment to a post (requires authentication)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'number': {
+                            'type': 'integer',
+                            'description': 'The post number to comment on'
+                        },
+                        'content': {
+                            'type': 'string',
+                            'description': 'The comment content'
+                        }
+                    },
+                    'required': ['number', 'content']
+                }
+            },
+            {
+                'name': 'update_comment',
+                'description': 'Update a comment (requires authentication and ownership)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'post_number': {
+                            'type': 'integer',
+                            'description': 'The post number'
+                        },
+                        'comment_id': {
+                            'type': 'integer',
+                            'description': 'The comment ID to update'
+                        },
+                        'content': {
+                            'type': 'string',
+                            'description': 'The new comment content'
+                        }
+                    },
+                    'required': ['post_number', 'comment_id', 'content']
+                }
+            },
+            {
+                'name': 'delete_comment',
+                'description': 'Delete a comment (requires authentication and ownership/admin)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'post_number': {
+                            'type': 'integer',
+                            'description': 'The post number'
+                        },
+                        'comment_id': {
+                            'type': 'integer',
+                            'description': 'The comment ID to delete'
+                        }
+                    },
+                    'required': ['post_number', 'comment_id']
+                }
+            },
+            {
+                'name': 'list_tags',
+                'description': 'List all available tags',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {}
+                }
+            },
+            {
+                'name': 'create_tag',
+                'description': 'Create a new tag (requires admin role)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'name': {
+                            'type': 'string',
+                            'description': 'The tag name'
+                        },
+                        'color': {
+                            'type': 'string',
+                            'description': 'The tag color (hex format, e.g., #FF0000)'
+                        },
+                        'isPublic': {
+                            'type': 'boolean',
+                            'description': 'Whether the tag is public (default: true)'
+                        }
+                    },
+                    'required': ['name', 'color']
+                }
+            },
+            {
+                'name': 'update_tag',
+                'description': 'Update an existing tag (requires admin role)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'slug': {
+                            'type': 'string',
+                            'description': 'The tag slug to update'
+                        },
+                        'name': {
+                            'type': 'string',
+                            'description': 'The new tag name'
+                        },
+                        'color': {
+                            'type': 'string',
+                            'description': 'The new tag color (hex format, e.g., #FF0000)'
+                        },
+                        'isPublic': {
+                            'type': 'boolean',
+                            'description': 'Whether the tag is public'
+                        }
+                    },
+                    'required': ['slug', 'name', 'color']
+                }
+            },
+            {
+                'name': 'delete_tag',
+                'description': 'Delete a tag (requires admin role)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'slug': {
+                            'type': 'string',
+                            'description': 'The tag slug to delete'
+                        }
+                    },
+                    'required': ['slug']
+                }
+            },
+            {
+                'name': 'assign_tag',
+                'description': 'Assign a tag to a post (requires collaborator/admin role)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'post_number': {
+                            'type': 'integer',
+                            'description': 'The post number'
+                        },
+                        'slug': {
+                            'type': 'string',
+                            'description': 'The tag slug to assign'
+                        }
+                    },
+                    'required': ['post_number', 'slug']
+                }
+            },
+            {
+                'name': 'unassign_tag',
+                'description': 'Unassign a tag from a post (requires collaborator/admin role)',
+                'inputSchema': {
+                    'type': 'object',
+                    'properties': {
+                        'post_number': {
+                            'type': 'integer',
+                            'description': 'The post number'
+                        },
+                        'slug': {
+                            'type': 'string',
+                            'description': 'The tag slug to unassign'
+                        }
+                    },
+                    'required': ['post_number', 'slug']
+                }
             }
         ]
         
@@ -290,6 +468,26 @@ class FiderMCPServer:
                 result = await self.delete_post(args)
             elif tool_name == 'respond_to_post':
                 result = await self.respond_to_post(args)
+            elif tool_name == 'list_comments':
+                result = await self.list_comments(args)
+            elif tool_name == 'add_comment':
+                result = await self.add_comment(args)
+            elif tool_name == 'update_comment':
+                result = await self.update_comment(args)
+            elif tool_name == 'delete_comment':
+                result = await self.delete_comment(args)
+            elif tool_name == 'list_tags':
+                result = await self.list_tags(args)
+            elif tool_name == 'create_tag':
+                result = await self.create_tag(args)
+            elif tool_name == 'update_tag':
+                result = await self.update_tag(args)
+            elif tool_name == 'delete_tag':
+                result = await self.delete_tag(args)
+            elif tool_name == 'assign_tag':
+                result = await self.assign_tag(args)
+            elif tool_name == 'unassign_tag':
+                result = await self.unassign_tag(args)
             else:
                 raise ValueError(f'Unknown tool: {tool_name}')
                 
@@ -446,6 +644,183 @@ class FiderMCPServer:
             'content': [{
                 'type': 'text',
                 'text': f"Post #{args['number']} status updated to '{args['status']}' successfully"
+            }]
+        }
+        
+    # Comment methods
+    async def list_comments(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """List comments for a specific post."""
+        if not args.get('number'):
+            raise ValueError('Post number is required')
+            
+        data = await self.make_request('GET', f"/api/v1/posts/{args['number']}/comments")
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Comments for post #{args['number']}:\n\n{json.dumps(data, indent=2)}"
+            }]
+        }
+        
+    async def add_comment(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Add a comment to a post."""
+        if not args.get('number'):
+            raise ValueError('Post number is required')
+        if not args.get('content'):
+            raise ValueError('Comment content is required')
+            
+        body = {
+            'content': args['content']
+        }
+        
+        data = await self.make_request('POST', f"/api/v1/posts/{args['number']}/comments", json_data=body)
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Comment added successfully to post #{args['number']}:\n\n{json.dumps(data, indent=2)}"
+            }]
+        }
+        
+    async def update_comment(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Update a comment."""
+        if not args.get('post_number'):
+            raise ValueError('Post number is required')
+        if not args.get('comment_id'):
+            raise ValueError('Comment ID is required')
+        if not args.get('content'):
+            raise ValueError('Comment content is required')
+            
+        body = {
+            'content': args['content']
+        }
+        
+        await self.make_request('PUT', f"/api/v1/posts/{args['post_number']}/comments/{args['comment_id']}", json_data=body)
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Comment #{args['comment_id']} updated successfully"
+            }]
+        }
+        
+    async def delete_comment(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Delete a comment."""
+        if not args.get('post_number'):
+            raise ValueError('Post number is required')
+        if not args.get('comment_id'):
+            raise ValueError('Comment ID is required')
+            
+        await self.make_request('DELETE', f"/api/v1/posts/{args['post_number']}/comments/{args['comment_id']}")
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Comment #{args['comment_id']} deleted successfully"
+            }]
+        }
+        
+    # Tag methods
+    async def list_tags(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """List all available tags."""
+        data = await self.make_request('GET', '/api/v1/tags')
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Available tags:\n\n{json.dumps(data, indent=2)}"
+            }]
+        }
+        
+    async def create_tag(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new tag."""
+        if not args.get('name'):
+            raise ValueError('Tag name is required')
+        if not args.get('color'):
+            raise ValueError('Tag color is required')
+            
+        body = {
+            'name': args['name'],
+            'color': args['color'],
+            'isPublic': args.get('isPublic', True)
+        }
+        
+        data = await self.make_request('POST', '/api/v1/tags', json_data=body)
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Tag created successfully:\n\n{json.dumps(data, indent=2)}"
+            }]
+        }
+        
+    async def update_tag(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Update an existing tag."""
+        if not args.get('slug'):
+            raise ValueError('Tag slug is required')
+        if not args.get('name'):
+            raise ValueError('Tag name is required')
+        if not args.get('color'):
+            raise ValueError('Tag color is required')
+            
+        body = {
+            'name': args['name'],
+            'color': args['color'],
+            'isPublic': args.get('isPublic', True)
+        }
+        
+        data = await self.make_request('PUT', f"/api/v1/tags/{args['slug']}", json_data=body)
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Tag '{args['slug']}' updated successfully:\n\n{json.dumps(data, indent=2)}"
+            }]
+        }
+        
+    async def delete_tag(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Delete a tag."""
+        if not args.get('slug'):
+            raise ValueError('Tag slug is required')
+            
+        await self.make_request('DELETE', f"/api/v1/tags/{args['slug']}")
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Tag '{args['slug']}' deleted successfully"
+            }]
+        }
+        
+    async def assign_tag(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Assign a tag to a post."""
+        if not args.get('post_number'):
+            raise ValueError('Post number is required')
+        if not args.get('slug'):
+            raise ValueError('Tag slug is required')
+            
+        await self.make_request('POST', f"/api/v1/posts/{args['post_number']}/tags/{args['slug']}")
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Tag '{args['slug']}' assigned to post #{args['post_number']} successfully"
+            }]
+        }
+        
+    async def unassign_tag(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Unassign a tag from a post."""
+        if not args.get('post_number'):
+            raise ValueError('Post number is required')
+        if not args.get('slug'):
+            raise ValueError('Tag slug is required')
+            
+        await self.make_request('DELETE', f"/api/v1/posts/{args['post_number']}/tags/{args['slug']}")
+        
+        return {
+            'content': [{
+                'type': 'text',
+                'text': f"Tag '{args['slug']}' unassigned from post #{args['post_number']} successfully"
             }]
         }
 
